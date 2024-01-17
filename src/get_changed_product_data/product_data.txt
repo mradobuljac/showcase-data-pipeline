@@ -1,0 +1,31 @@
+"ProductId","ProductName","Category","ProductRating"
+1,"QuantumBlaze Tablet","Electronics",17
+2,"NebulaGlow Smartwatch","Wearables",24
+3,"AeroFusion Drone","Gadgets",25
+4,"ZenithFlare VR Headset","Virtual Reality",19
+5,"CelestialEcho Earbuds","Audio",13
+6,"NimbusJet Power Bank","Accessories",2
+7,"SolarSpectra Coffee Maker","Appliances",25
+8,"GravityStrike Laptop","Electronics",2
+9,"TerraTron Fitness Tracker","Fitness",11
+10,"SonicPulse Speaker","Audio",2
+11,"AquaVista Smart Bottle","Wellness",6
+12,"NovaLume LED Desk Lamp","Lighting",12
+13,"EmberSphere Thermostat","Smart Home",24
+14,"VortexXplorer Backpack","Accessories",8
+15,"SolsticeWave Scooter","Electric Vehicles",23
+16,"PixelHarbor Camera","Security",13
+17,"GalaxyVista Telescope","Astronomy",21
+18,"PulseRift VR Gloves","Virtual Reality",10
+19,"InfinityGlide Toothbrush","Personal Care",24
+20,"ZephyrShift Air Purifier","Home & Living",10
+21,"AstroPod Rocket Backpack","Accessories",26
+22,"MysticBloom Indoor Garden","Gardening",2
+23,"TitanForge 3D Printer","3D Printing",23
+24,"FrostFlow Portable Cooler","Outdoor",16
+25,"HyperBeam Laser Pointer","Office Supplies",14
+26,"SolarBurst Solar Charger","Accessories",10
+27,"AeroGlide Electric Skateboard","Electric Vehicles",28
+28,"BioZen Mindfulness App","Apps & Software",8
+29,"QuantumQuill Smart Pen","Writing Instruments",14
+30,"SolarEase Solar Panels","Energy",24
