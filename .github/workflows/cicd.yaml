@@ -1,0 +1,35 @@
+name: cicd
+
+on:
+  push: # trigger when code is pushed directly to main branch
+    branches:
+      - main
+  workflow_dispatch:  # trigger workflow manually via GitHub Actions console
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: install python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: install aws sam
+        uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+      - name: setup aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} # stored in GitHub Actions secrets store
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # stored in GitHub Actions secrets store
+          aws-region: us-east-1
+
+      # Build project
+      - name: sam build
+        run: sam build
+      # Prevent prompts and failure when the stack is unchanged
+      - name: sam deploy
+        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
