@@ -33,9 +33,17 @@ Resources:
       CodeUri: src/products_to_s3/
       Handler: products_to_s3.lambda_handler
       Runtime: python3.10
+      Policies: # this bucket policy is all that's necessary to allow lambda func to write to a bucket. Too easy!
+        - S3WritePolicy:
+            BucketName: mradobuljac-bucket
       Architectures:
         - x86_64
       Environment:
         Variables:
           ENDPOINT: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
 
+
+Outputs:
+  GetChangedProductDataApi:
+    Description: "API Gateway endpoint URL for Prod stage for GetChangedProductData function"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
