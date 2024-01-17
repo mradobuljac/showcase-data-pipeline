@@ -29,6 +29,20 @@ Resources:
             Path: /products
             Method: get
 
+  GetGeneratedSalesDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/get_generated_sales_data/
+      Handler: get_generated_sales_data.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetGeneratedSalesDataApi:
+          Type: HttpApi
+          Properties:
+            Path: /sales
+            Method: get
 
   ProductsToS3:
     Type: AWS::Serverless::Function
@@ -46,7 +60,6 @@ Resources:
       Environment:
         Variables:
           ENDPOINT: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
-
 
   LayerAwswrangler:
     Type: AWS::Serverless::LayerVersion
