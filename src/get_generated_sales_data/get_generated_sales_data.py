@@ -1,8 +1,8 @@
 from random import randint, uniform
 import uuid
+import json
 import awswrangler as wr
 import pandas as pd
-import json
 
 NUM_OF_GENERATED_ROWS = 30
 BUCKET_NAME = "mradobuljac-bucket"

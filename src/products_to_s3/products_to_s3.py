@@ -1,8 +1,9 @@
 import json
+import os
 import requests as r
 import awswrangler as wr
 import pandas as pd
-import os
+
 
 API = os.environ["ENDPOINT"]
 ENDPOINT = "https://5vhs3sddtk.execute-api.us-east-1.amazonaws.com/products"
