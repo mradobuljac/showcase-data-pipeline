@@ -2,8 +2,6 @@ import json
 
 import pytest
 
-from src import get_changed_product_data
-
 
 @pytest.fixture()
 def apigw_event():
