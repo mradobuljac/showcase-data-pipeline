@@ -2,9 +2,8 @@ import json
 import requests as r
 import awswrangler as wr
 import pandas as pd
-import os
 
-# ENVIRONMENT_VAR_ENDPOINT = os.environ["ENDPOINT"]
+
 ENDPOINT = "https://5vhs3sddtk.execute-api.us-east-1.amazonaws.com/products"
 BUCKET_NAME = "mradobuljac-bucket"
 FILE_NAME = "products.csv"
@@ -36,8 +35,6 @@ def lambda_handler(event, context):
 
     # write dataframe directly to s3
     wr.s3.to_csv(df, f"s3://{BUCKET_NAME}/{ds}/{FILE_NAME}", index=False)
-
-    # print(ENVIRONMENT_VAR_ENDPOINT)
 
     # TODO implement
     return {"statusCode": 200, "body": json.dumps("Success")}
