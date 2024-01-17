@@ -31,7 +31,7 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   GetChangedProductDataFunctionApi:
-    Description: "API Gateway endpoint URL for Prod stage for get_changed_product_data function"
+    Description: "API Gateway endpoint URL get_changed_product_data function"
     Value: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
   GetChangedProductDataFunction:
     Description: "GetChangedProductDataFunction ARN"
