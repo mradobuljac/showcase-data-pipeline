@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     df = pd.DataFrame(data_rows, columns=header)
 
     # get {{ ds }} from Airflow
-    if event:
+    if "ds" in event:
         ds = event["ds"]
     else:
         ds = "2024-01-01"  # dummy value for dev purposes

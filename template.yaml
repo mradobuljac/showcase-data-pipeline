@@ -39,8 +39,3 @@ Resources:
         Variables:
           ENDPOINT: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
 
-
-Outputs:
-  GetChangedProductDataApi:
-    Description: "API Gateway endpoint URL for Prod stage for GetChangedProductData function"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
