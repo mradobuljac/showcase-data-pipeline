@@ -1,4 +1,3 @@
 black
-bandit
 pytest
 pre-commit
