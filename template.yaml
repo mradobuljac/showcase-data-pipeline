@@ -37,8 +37,8 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          ENDPOINT: !ImportValue GetChangedProductDataApi
-          
+          ENDPOINT: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
+
 
 Outputs:
   GetChangedProductDataApi:
