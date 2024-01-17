@@ -1,0 +1,9 @@
+# Install pre-commit:   pip3 install pre-commit
+# Install hooks:        pre-commit install
+
+repos:
+    # code formatting
+-   repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+    -   id: black
