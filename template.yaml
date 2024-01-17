@@ -20,8 +20,6 @@ Resources:
       Runtime: python3.10
       Architectures:
         - x86_64
-      Layers:
-        - !Ref LayerAwswrangler
       Events:
         GetChangedProductDataApi:
           Type: HttpApi
