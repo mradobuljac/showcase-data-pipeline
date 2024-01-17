@@ -55,24 +55,9 @@ Resources:
             BucketName: mradobuljac-bucket
       Architectures:
         - x86_64
-      Layers:
-        - !Ref LayerAwswrangler
       Environment:
         Variables:
           ENDPOINT: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
-
-  LayerAwswrangler:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: awswrangler-layer
-      Description: awswrangler layer made in aws sam template
-      ContentUri: layers/awswrangler/ # directory containing requirements.txt file for layers
-      CompatibleRuntimes:
-        - python3.10
-    Metadata:
-      RequirementsFile: requirements.txt # name of file holding requirements. Must be located in ContentUri directory
-      BuildMethod: python3.10
-      BuildArchitecture: x86_64
 
 
 Outputs:
