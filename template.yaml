@@ -12,6 +12,12 @@ Globals:
 
 
 Resources:
+
+  GetChangedProductDataApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: MyGetChangedProductDataApi
+
   GetChangedProductDataFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -24,8 +30,14 @@ Resources:
         GetChangedProductDataApi:
           Type: HttpApi
           Properties:
+            ApiId: !Ref GetChangedProductDataApi
             Path: /products
             Method: get
+
+  GetGeneratedSalesDataApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: MyGetGeneratedSalesDataApi
 
   GetGeneratedSalesDataFunction:
     Type: AWS::Serverless::Function
@@ -39,6 +51,7 @@ Resources:
         GetGeneratedSalesDataApi:
           Type: HttpApi
           Properties:
+            ApiId: !Ref GetGeneratedSalesDataApi
             Path: /sales
             Method: get
 
@@ -55,13 +68,13 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          ENDPOINT: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
+          ENDPOINT: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
 
 
 Outputs:
   GetChangedProductDataApi:
     Description: "API Gateway endpoint URL for Prod stage for GetChangedProductData function"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
+    Value: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
   GetGeneratedSalesDataApi:
     Description: "API Gateway endpoint URL for Prod stage for GetGeneratedSalesData function"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/sales"
+    Value: !Sub "https://${GetGeneratedSalesDataApi}.execute-api.${AWS::Region}.amazonaws.com/sales"
