@@ -26,16 +26,20 @@ Resources:
             Path: /products
             Method: get
 
+
   ProductsToS3:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/products_to_s3/
       Handler: products_to_s3.lambda_handler
       Runtime: python3.10
-      Layers:
-        - arn:aws:lambda:REGION:us-east-1:layer:AWSSDKPandas-Python39:12  # Replace REGION and ACCOUNT_ID with your values
-      Environment:
-        Variables:
-          ENDPOINT: my-endpoint #endpoint output from GetChangedProductDataApi
       Architectures:
         - x86_64
+      Environment:
+        Variables:
+          # ENDPOINT: my-endpoint
+
+Outputs:
+  GetChangedProductDataApi:
+    Description: "API Gateway endpoint URL for Prod stage for GetChangedProductData function"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/products"
