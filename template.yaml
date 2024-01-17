@@ -35,7 +35,10 @@ Resources:
       Runtime: python3.10
       Architectures:
         - x86_64
-
+      Environment:
+        Variables:
+          ENDPOINT: !ImportValue GetChangedProductDataApi
+          
 
 Outputs:
   GetChangedProductDataApi:
