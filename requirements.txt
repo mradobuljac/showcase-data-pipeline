@@ -1,3 +1,7 @@
+requests
 black
 pytest
 pre-commit
+boto3
+awswrangler
+pandas
