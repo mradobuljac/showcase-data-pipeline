@@ -1,6 +1,3 @@
 requests
 boto3
 awswrangler
-black
-bandit
-pytest
