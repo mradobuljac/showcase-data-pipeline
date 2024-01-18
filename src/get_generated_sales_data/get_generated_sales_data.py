@@ -28,7 +28,6 @@ def lambda_handler(event, context):
             data_row.append(
                 "2024-01-01"
             )  # dummy values if date queryStringParameter is omitted from endpoint URL
-        data_row.append(randint(1, 30))  # customer_id
         data_row.append(randint(1, 30))  # product_id
         data_row.append(randint(1, 100))  # quantity_sold
         data_row.append(uniform(1.0, 1000))  # revenue

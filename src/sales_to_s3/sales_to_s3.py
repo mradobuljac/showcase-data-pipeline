@@ -32,11 +32,20 @@ def lambda_handler(event, context):
     header = data[0]
     data_rows = data[1:]
 
+    # Specify column data types to match with Redshift table
+    dtype_mapping = {
+        "date_id": "DATE",
+        "product_id": "INTEGER",
+        "quantity_sold": "INTEGER",
+        "revenue": "FLOAT",
+        "transaction_code": "VARCHAR(100)",
+    }
+
     # Create Pandas DataFrame
     df = pd.DataFrame(data_rows, columns=header)
 
     # write dataframe directly to s3
     full_path = f"s3://{BUCKET_NAME}/{date}/{FILE_NAME}"
-    wr.s3.to_parquet(df, path=full_path, index=False)
+    wr.s3.to_parquet(df, path=full_path, index=False, dtype=dtype_mapping)
 
     return {"statusCode": 200, "body": json.dumps("Success")}
