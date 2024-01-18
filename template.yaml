@@ -42,6 +42,7 @@ Resources:
   ProductsToS3:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: showcase_data_pipeline_products_to_s3
       CodeUri: src/products_to_s3/
       Handler: products_to_s3.lambda_handler
       Runtime: python3.10
@@ -80,6 +81,7 @@ Resources:
   SalesToS3:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: showcase_data_pipeline_sales_to_s3
       CodeUri: src/sales_to_s3/
       Handler: sales_to_s3.lambda_handler
       Runtime: python3.10
