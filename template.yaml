@@ -76,7 +76,6 @@ Resources:
           ENDPOINT: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
           BUCKET: !Ref PipelineBucket
 
-
 Outputs:
   GetChangedProductDataApi:
     Description: "API Gateway endpoint URL for Prod stage for GetChangedProductData function"
