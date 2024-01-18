@@ -39,6 +39,22 @@ Resources:
             Path: /products
             Method: get
 
+  ProductsToS3:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/products_to_s3/
+      Handler: products_to_s3.lambda_handler
+      Runtime: python3.10
+      Policies: # this bucket policy is all that's necessary to allow lambda func to write to a bucket. Too easy!
+        - S3WritePolicy:
+            BucketName: !Ref PipelineBucket
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          ENDPOINT: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
+          BUCKET: !Ref PipelineBucket
+
   GetGeneratedSalesDataApi:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -60,11 +76,12 @@ Resources:
             Path: /sales
             Method: get
 
-  ProductsToS3:
+
+  SalesToS3:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/products_to_s3/
-      Handler: products_to_s3.lambda_handler
+      CodeUri: src/sales_to_s3/
+      Handler: sales_to_s3.lambda_handler
       Runtime: python3.10
       Policies: # this bucket policy is all that's necessary to allow lambda func to write to a bucket. Too easy!
         - S3WritePolicy:
@@ -73,8 +90,11 @@ Resources:
         - x86_64
       Environment:
         Variables:
-          ENDPOINT: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
+          ENDPOINT: !Sub "https://${GetGeneratedSalesDataApi}.execute-api.${AWS::Region}.amazonaws.com/sales"
           BUCKET: !Ref PipelineBucket
+
+
+
 
 Outputs:
   GetChangedProductDataApi:

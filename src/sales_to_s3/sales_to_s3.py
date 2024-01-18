@@ -6,12 +6,21 @@ import pandas as pd
 
 ENDPOINT = os.environ["ENDPOINT"]
 BUCKET_NAME = os.environ["BUCKET"]
-FILE_NAME = "products.csv"
+FILE_NAME = "sales.parquet"
 
 
 def lambda_handler(event, context):
+
+    # get logical date from Airflow
+    if "date" in event:
+        date = event["date"]
+    else:
+        date = "2024-01-01"  # dummy value for dev purposes
+
+    payload = {"date": date}
+
     try:
-        resp = r.get(ENDPOINT)
+        resp = r.get(ENDPOINT, params=payload)
         resp.raise_for_status()
     except r.RequestException as e:
         print(e)
@@ -26,14 +35,8 @@ def lambda_handler(event, context):
     # Create Pandas DataFrame
     df = pd.DataFrame(data_rows, columns=header)
 
-    # get logical date from Airflow
-    if "date" in event:
-        date = event["date"]
-    else:
-        date = "2024-01-01"  # dummy value for dev purposes
-
     # write dataframe directly to s3
     full_path = f"s3://{BUCKET_NAME}/{date}/{FILE_NAME}"
-    wr.s3.to_csv(df, path=full_path, index=False)
+    wr.s3.to_parquet(df, path=full_path, index=False)
 
     return {"statusCode": 200, "body": json.dumps("Success")}
