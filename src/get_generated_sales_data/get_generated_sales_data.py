@@ -8,7 +8,6 @@ NUM_OF_GENERATED_ROWS = 50
 def lambda_handler(event, context):
     headers = [
         "date_id",
-        "customer_id",
         "product_id",
         "quantity_sold",
         "revenue",
