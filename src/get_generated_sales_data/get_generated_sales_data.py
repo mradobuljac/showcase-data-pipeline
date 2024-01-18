@@ -2,7 +2,7 @@ from random import randint, uniform
 import uuid
 import json
 
-NUM_OF_GENERATED_ROWS = 30
+NUM_OF_GENERATED_ROWS = 50
 
 
 def lambda_handler(event, context):
@@ -28,7 +28,7 @@ def lambda_handler(event, context):
             data_row.append(
                 "2024-01-01"
             )  # dummy values if date queryStringParameter is omitted from endpoint URL
-        data_row.append(randint(1, 30))  # product_id
+        data_row.append(randint(1, 100))  # product_id
         data_row.append(randint(1, 100))  # quantity_sold
         data_row.append(uniform(1.0, 1000))  # revenue
         data_row.append(str(uuid.uuid4()))  # transaction_code

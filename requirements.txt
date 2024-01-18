@@ -5,3 +5,4 @@ pre-commit
 boto3
 awswrangler
 pandas
+faker
