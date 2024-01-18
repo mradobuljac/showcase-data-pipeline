@@ -5,9 +5,8 @@ import awswrangler as wr
 import pandas as pd
 
 
-API = os.environ["ENDPOINT"]
-ENDPOINT = "https://5vhs3sddtk.execute-api.us-east-1.amazonaws.com/products"
-BUCKET_NAME = "mradobuljac-bucket"
+ENDPOINT = os.environ["ENDPOINT"]
+BUCKET_NAME = os.environ["BUCKET"]
 FILE_NAME = "products.csv"
 FULL_PATH = f"s3://{BUCKET_NAME}/{FILE_NAME}"
 
@@ -38,7 +37,7 @@ def lambda_handler(event, context):
     # write dataframe directly to s3
     wr.s3.to_csv(df, f"s3://{BUCKET_NAME}/{ds}/{FILE_NAME}", index=False)
 
-    print(f"API: {API}")
+    print(f"API: {ENDPOINT}")
 
     # TODO implement
     return {"statusCode": 200, "body": json.dumps("Success")}

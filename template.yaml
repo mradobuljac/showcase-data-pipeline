@@ -13,6 +13,11 @@ Globals:
 
 Resources:
 
+  PipelineBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: showcase-data-pipeline
+
   GetChangedProductDataApi:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -63,12 +68,13 @@ Resources:
       Runtime: python3.10
       Policies: # this bucket policy is all that's necessary to allow lambda func to write to a bucket. Too easy!
         - S3WritePolicy:
-            BucketName: mradobuljac-bucket
+            BucketName: !Ref PipelineBucket
       Architectures:
         - x86_64
       Environment:
         Variables:
           ENDPOINT: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
+          BUCKET: !Ref PipelineBucket
 
 
 Outputs:
