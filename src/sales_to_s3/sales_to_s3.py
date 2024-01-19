@@ -9,7 +9,13 @@ BUCKET_NAME = os.environ["BUCKET"]
 FILE_NAME = "sales.parquet"
 
 
-def lambda_handler(event, context):
+def lambda_handler(event: dict, context: dict) -> str:
+    """Reads sales data from API Gateway endpoint and uploads to S3 bucket
+
+    :param event: Payload sent by Airflow. Used to extract pipeline execution logical date
+    :param context: Managed by AWS. Contains info about function execution and environment
+    :return: execution status result
+    """
 
     # get logical date from Airflow
     if "date" in event:
@@ -48,4 +54,4 @@ def lambda_handler(event, context):
     full_path = f"s3://{BUCKET_NAME}/{date}/{FILE_NAME}"
     wr.s3.to_parquet(df, path=full_path, index=False, dtype=dtype_mapping)
 
-    return {"statusCode": 200, "body": json.dumps("Success")}
+    return "Success"

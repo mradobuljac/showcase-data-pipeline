@@ -5,7 +5,14 @@ import json
 NUM_OF_GENERATED_ROWS = 50
 
 
-def lambda_handler(event, context):
+def lambda_handler(event: dict, context: dict) -> dict:
+    """Back-end code for API Gateway endpoint serving sales data
+
+    :param event: Payload sent by API Gateway. Used to extract date parameter from endpoint URL
+    :param context: Managed by AWS. Contains info about function execution and environment
+    :return: json formatted list of semi-randomly generated sales transactions
+    """
+
     headers = [
         "date_id",
         "product_id",

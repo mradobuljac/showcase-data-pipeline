@@ -11,7 +11,14 @@ SOURCE_DATA_FILE = r"product_data.txt"
 fake = Faker()
 
 
-def lambda_handler(event, context):
+def lambda_handler(event: any, context: dict) -> dict:
+    """Back-end code for API Gateway endpoint serving product data
+
+    :param event: Payload sent by API Gateway. Not used in this function
+    :param context: Managed by AWS. Contains info about function execution and environment
+    :return: json formatted list of semi-randomly generated products
+    """
+
     # read source data file
     with open(SOURCE_DATA_FILE) as f:
         products = list(csv.reader(f))
