@@ -17,14 +17,17 @@ from airflow.providers.amazon.aws.operators.redshift_data import RedshiftDataOpe
 def showcase_data_pipeline():
     # {{ ds }} is a template for logical date. On runtime will be resolved into yyyy-mm-dd corresponding to each dagrun
     payload = {"date": "{{ ds }}"}
+    redshift_cluster = "redshift-cluster-1"
+    redshift_database = "dev"
+    redshift_user = "awsuser"
 
     # creating and initializing Redshift objects
     redshift_ddl_setup = RedshiftDataOperator(
         task_id="redshift_DDL_setup",
         aws_conn_id="aws_conn",
-        cluster_identifier="redshift-cluster-1",
-        database="dev",
-        db_user="awsuser",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
         sql="./sql/DDL_setup.sql",
         wait_for_completion=True,
     )
@@ -51,9 +54,9 @@ def showcase_data_pipeline():
     s3_to_redshift_stage_products = RedshiftDataOperator(
         task_id="s3_to_redshift_stage_products",
         aws_conn_id="aws_conn",
-        cluster_identifier="redshift-cluster-1",
-        database="dev",
-        db_user="awsuser",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
         sql="./sql/s3_to_stage_products.sql",
         wait_for_completion=True,
     )
@@ -62,9 +65,9 @@ def showcase_data_pipeline():
     s3_to_redshift_stage_sales = RedshiftDataOperator(
         task_id="s3_to_redshift_stage_sales",
         aws_conn_id="aws_conn",
-        cluster_identifier="redshift-cluster-1",
-        database="dev",
-        db_user="awsuser",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
         sql="./sql/s3_to_stage_sales.sql",
         wait_for_completion=True,
     )
@@ -73,9 +76,9 @@ def showcase_data_pipeline():
     upsert_dim_products = RedshiftDataOperator(
         task_id="upsert_dim_products",
         aws_conn_id="aws_conn",
-        cluster_identifier="redshift-cluster-1",
-        database="dev",
-        db_user="awsuser",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
         sql="./sql/upsert_dim_products.sql",
         wait_for_completion=True,
     )
@@ -84,9 +87,9 @@ def showcase_data_pipeline():
     upsert_fact_sales = RedshiftDataOperator(
         task_id="upsert_fact_sales",
         aws_conn_id="aws_conn",
-        cluster_identifier="redshift-cluster-1",
-        database="dev",
-        db_user="awsuser",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
         sql="./sql/upsert_fact_sales.sql",
         wait_for_completion=True,
     )
