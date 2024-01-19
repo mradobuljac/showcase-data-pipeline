@@ -24,33 +24,24 @@ def lambda_handler(event: dict, context: dict) -> dict:
     :return: json formatted list of semi-randomly generated sales transactions
     """
 
-    headers = [
-        "date_id",
-        "product_id",
-        "quantity_sold",
-        "revenue",
-        "transaction_code",
-    ]
-
+    # generate NUM_OF_GENERATED_ROWS rows of random fact data
     sales_data = []
-    sales_data.append(headers)
-
-    # generate 30 rows of random fact data
     for i in range(NUM_OF_GENERATED_ROWS):
-        data_row = []
+        d = {}
 
         if "queryStringParameters" in event:  # date_id
-            data_row.append(event["queryStringParameters"]["date"])
+            d["date_id"] = event["queryStringParameters"]["date"]
         else:
-            data_row.append(
-                "2024-01-01"  # dummy values if date queryStringParameter is omitted from endpoint URL
-            )
-        data_row.append(randint(1, 100))  # product_id
-        data_row.append(randint(1, 100))  # quantity_sold
-        data_row.append(uniform(1.0, 1000))  # revenue
-        data_row.append(str(uuid.uuid4()))  # transaction_code
-        logging.info(f"Generated row: {data_row}")
+            d[
+                "date_id"
+            ] = "2024-01-01"  # fallback value if date queryStringParameter is omitted from endpoint URL
 
-        sales_data.append(data_row)
+        d["product_id"] = randint(1, 100)
+        d["quantity_sold"] = randint(1, 100)
+        d["revenue"] = uniform(1.0, 1000)
+        d["transaction_code"] = str(uuid.uuid4())
+        logging.info(f"Generated row: {d}")
+
+        sales_data.append(d)
 
     return {"statusCode": 200, "body": json.dumps(sales_data)}

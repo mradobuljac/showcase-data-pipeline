@@ -43,11 +43,8 @@ def lambda_handler(event: dict, context: dict) -> str:
         logging.info(e)
         return "Request failed"
 
+    # extract data
     data = resp.json()
-
-    # Extract header and data rows
-    header = data[0]
-    data_rows = data[1:]
 
     # Specify column data types to match with Redshift table
     dtype_mapping = {
@@ -59,7 +56,7 @@ def lambda_handler(event: dict, context: dict) -> str:
     }
 
     # Create Pandas DataFrame
-    df = pd.DataFrame(data_rows, columns=header)
+    df = pd.DataFrame(data)
 
     # write dataframe directly to s3
     full_path = f"s3://{BUCKET_NAME}/{date}/{FILE_NAME}"
