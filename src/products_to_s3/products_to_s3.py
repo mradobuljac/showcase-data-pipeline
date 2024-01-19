@@ -33,14 +33,11 @@ def lambda_handler(event: dict, context: dict) -> str:
         logging.info(e)
         return "Request failed"
 
-    data = resp.json()
-
-    # Extract header and data rows
-    header = data[0]
-    data_rows = data[1:]
+    # extract data
+    data = resp.json()["body"]
 
     # Create Pandas DataFrame
-    df = pd.DataFrame(data_rows, columns=header)
+    df = pd.DataFrame(data)
 
     # get pipeline execution logical date from Airflow
     # used to partition S3 bucket upload location

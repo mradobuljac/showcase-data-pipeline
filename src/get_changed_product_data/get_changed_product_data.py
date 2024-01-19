@@ -30,14 +30,24 @@ def lambda_handler(event: any, context: dict) -> dict:
     :return: json formatted list of semi-randomly generated products
     """
 
-    # read source data file containing base products
+    # read source data file containing base products into list of dicts
+    products = []
     with open(SOURCE_DATA_FILE) as f:
-        products = list(csv.reader(f))
+        reader = csv.reader(f)
+        next(reader, None)  # skip headers row
+        for product in reader:
+            d = {
+                "ProductId": product[0],
+                "ProductName": product[1],
+                "Category": product[2],
+                "ProductRating": product[3],
+            }
+            products.append(d)
 
     # change ProductRating value of randomly selected products
     rands = [randint(1, 30) for _ in range(NUM_CHANGES)]
     for rand in rands:
-        products[rand][3] = randint(1, 100)
+        products[rand]["ProductRating"] = randint(1, 100)
         logging.info(f"Changed existing product to: {products[rand]}")
 
     # generate new rows
@@ -48,19 +58,20 @@ def lambda_handler(event: any, context: dict) -> dict:
         "Home & Living",
         "Fitness",
         "Wearables",
+        "Gadgets",
+        "Smart Home",
+        "Virtual Reality",
+        "Outdoor",
     )
+
     for _ in range(NUM_NEW_ROWS):
-        data_row = []
-        data_row.append(randint(50, 100))  # ProductId
-        data_row.append(
-            f"{fake.word().capitalize()} {fake.word().capitalize()}"  # ProductName
-        )
-        data_row.append(random.choice(categories))  # ProductCategory
-        data_row.append(randint(1, 100))  # ProductRating
-        logging.info(f"Newly generated product: {data_row}")
+        d = {
+            "ProductId": randint(50, 100),
+            "ProductName": f"{fake.word().capitalize()} {fake.word().capitalize()}",
+            "ProductCategory": random.choice(categories),
+            "ProductRating": randint(1, 100),
+        }
+        logging.info(f"Newly generated product: {d}")
+        products.append(d)
 
-        products.append(data_row)
-
-    print(products)
-
-    return {"statusCode": 200, "body": json.dumps(products)}
+    return {"statusCode": 200, "body": products}
