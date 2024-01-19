@@ -74,4 +74,4 @@ def lambda_handler(event: any, context: dict) -> dict:
         logging.info(f"Newly generated product: {d}")
         products.append(d)
 
-    return {"statusCode": 200, "body": products}
+    return {"statusCode": 200, "body": json.dumps(products)}

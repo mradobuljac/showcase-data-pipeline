@@ -34,7 +34,7 @@ def lambda_handler(event: dict, context: dict) -> str:
         return "Request failed"
 
     # extract data
-    data = resp.json()["body"]
+    data = resp.json()
 
     # Create Pandas DataFrame
     df = pd.DataFrame(data)
