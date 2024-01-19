@@ -43,7 +43,7 @@ WHERE tgt.product_id IS NULL    -- identify new rows
 -- If there is no corresponding dimension row for incoming fact table row, insert new row with only natural key and generated surrogate key
 -- That way row can be immediately joined to fact table, and can be updated later when the rest of dimensional context arrives
 INSERT INTO showcase_data_pipeline.dim_products (product_id)
-SELECT sls.product_id
+SELECT DISTINCT sls.product_id
 FROM showcase_data_pipeline.stage_sales sls
 LEFT JOIN showcase_data_pipeline.dim_products prod
     ON sls.product_id = prod.product_id
