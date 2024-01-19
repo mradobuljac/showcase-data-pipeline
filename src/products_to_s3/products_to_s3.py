@@ -1,3 +1,4 @@
+import os
 import requests as r
 import awswrangler as wr
 import pandas as pd
