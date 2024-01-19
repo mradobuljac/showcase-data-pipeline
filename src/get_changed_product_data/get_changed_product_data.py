@@ -8,9 +8,14 @@ import logging
 
 # initialization code to take advantage of hot-start containers
 fake = Faker()
-logging.basicConfig(
-    level=logging.INFO, format=" %(asctime)s -  %(levelname)s -  %(message)s"
-)
+if logging.getLogger().hasHandlers():
+    # Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
+    # `.basicConfig` does not execute. Thus, we set the level directly.
+    logging.getLogger().setLevel(logging.INFO)
+else:
+    logging.basicConfig(
+        level=logging.INFO, format=" %(asctime)s -  %(levelname)s -  %(message)s"
+    )
 
 NUM_CHANGES = 3  # number of updates to source data file
 NUM_NEW_ROWS = 3  # number of newly generated product rows

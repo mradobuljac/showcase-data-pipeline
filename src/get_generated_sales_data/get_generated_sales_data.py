@@ -4,9 +4,14 @@ import json
 import logging
 
 # initialization code to take advantage of hot-start containers
-logging.basicConfig(
-    level=logging.INFO, format=" %(asctime)s -  %(levelname)s -  %(message)s"
-)
+if logging.getLogger().hasHandlers():
+    # Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
+    # `.basicConfig` does not execute. Thus, we set the level directly.
+    logging.getLogger().setLevel(logging.INFO)
+else:
+    logging.basicConfig(
+        level=logging.INFO, format=" %(asctime)s -  %(levelname)s -  %(message)s"
+    )
 
 NUM_OF_GENERATED_ROWS = 50
 
