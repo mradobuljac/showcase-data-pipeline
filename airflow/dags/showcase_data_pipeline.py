@@ -17,6 +17,7 @@ import configparser
 )
 def showcase_data_pipeline():
     # {{ ds }} is a template for logical date. On runtime will be resolved into yyyy-mm-dd corresponding to each dagrun
+    # will be sent to lambda functions to orchestrate pipeline around "logical date" concept
     payload = {"date": "{{ ds }}"}
 
     parser = configparser.ConfigParser()
