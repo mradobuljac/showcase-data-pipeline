@@ -5,6 +5,7 @@ from airflow.providers.amazon.aws.operators.lambda_function import (
     LambdaInvokeFunctionOperator,
 )
 from airflow.providers.amazon.aws.operators.redshift_data import RedshiftDataOperator
+import configparser
 
 
 @dag(
@@ -17,9 +18,14 @@ from airflow.providers.amazon.aws.operators.redshift_data import RedshiftDataOpe
 def showcase_data_pipeline():
     # {{ ds }} is a template for logical date. On runtime will be resolved into yyyy-mm-dd corresponding to each dagrun
     payload = {"date": "{{ ds }}"}
-    redshift_cluster = "redshift-cluster-1"
-    redshift_database = "dev"
-    redshift_user = "awsuser"
+
+    parser = configparser.ConfigParser()
+    parser.read(
+        "/opt/airflow/dags/redshift_config.txt"  # location of redshift_config.txt file in docker container
+    )
+    redshift_cluster = parser.get("redshift", "redshift_cluster")
+    redshift_database = parser.get("redshift", "redshift_database")
+    redshift_user = parser.get("redshift", "redshift_user")
 
     # creating and initializing Redshift objects
     redshift_ddl_setup = RedshiftDataOperator(

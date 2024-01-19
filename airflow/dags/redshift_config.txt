@@ -1,0 +1,4 @@
+[redshift]
+redshift_cluster = redshift-cluster-1
+redshift_database = dev
+redshift_user = awsuser
