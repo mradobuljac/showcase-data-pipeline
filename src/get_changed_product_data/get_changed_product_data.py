@@ -39,7 +39,7 @@ def lambda_handler(event: any, context: dict) -> dict:
             d = {
                 "ProductId": product[0],
                 "ProductName": product[1],
-                "Category": product[2],
+                "ProductCategory": product[2],
                 "ProductRating": product[3],
             }
             products.append(d)
