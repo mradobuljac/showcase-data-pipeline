@@ -18,11 +18,13 @@ Resources:
     Properties:
       BucketName: showcase-data-pipeline
 
+  # API Endpoint serving product data
   GetChangedProductDataApi:
     Type: AWS::Serverless::HttpApi
     Properties:
       Name: MyGetChangedProductDataApi
 
+  # Backend Lambda code for product API endpoint
   GetChangedProductDataFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -39,6 +41,7 @@ Resources:
             Path: /products
             Method: get
 
+  # Lambda extracts product data from API and uploads to S3 bucket
   ProductsToS3:
     Type: AWS::Serverless::Function
     Properties:
@@ -56,11 +59,13 @@ Resources:
           ENDPOINT: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
           BUCKET: !Ref PipelineBucket
 
+  # API Endpoint serving sales data
   GetGeneratedSalesDataApi:
     Type: AWS::Serverless::HttpApi
     Properties:
       Name: MyGetGeneratedSalesDataApi
 
+  # Backend Lambda code for sales API endpoint
   GetGeneratedSalesDataFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -77,7 +82,7 @@ Resources:
             Path: /sales
             Method: get
 
-
+  # Lambda extracts sales data from API and uploads to S3 bucket
   SalesToS3:
     Type: AWS::Serverless::Function
     Properties:
@@ -94,8 +99,6 @@ Resources:
         Variables:
           ENDPOINT: !Sub "https://${GetGeneratedSalesDataApi}.execute-api.${AWS::Region}.amazonaws.com/sales"
           BUCKET: !Ref PipelineBucket
-
-
 
 
 Outputs:
