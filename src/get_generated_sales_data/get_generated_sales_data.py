@@ -37,6 +37,7 @@ def lambda_handler(event: dict, context: dict) -> dict:
             ] = "2024-01-01"  # fallback value if date queryStringParameter is omitted from endpoint URL
 
         d["product_id"] = randint(1, 100)
+        d["customer_id"] = randint(1, 100)
         d["quantity_sold"] = randint(1, 100)
         d["revenue"] = uniform(1.0, 1000)
         d["transaction_code"] = str(uuid.uuid4())

@@ -50,6 +50,7 @@ def lambda_handler(event: dict, context: dict) -> str:
     dtype_mapping = {
         "date_id": "DATE",
         "product_id": "INTEGER",
+        "customer_id": "INTEGER",
         "quantity_sold": "INTEGER",
         "revenue": "FLOAT",
         "transaction_code": "VARCHAR(100)",

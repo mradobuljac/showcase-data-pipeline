@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS showcase_data_pipeline.dim_customers (
 CREATE TABLE IF NOT EXISTS showcase_data_pipeline.stage_sales (
 date_id DATE SORTKEY DISTKEY,
 product_id INT,
+customer_id INT,
 quantity_sold INT,
 revenue REAL,
 transaction_code NVARCHAR(255)
