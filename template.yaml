@@ -13,6 +13,7 @@ Globals:
 
 Resources:
 
+  # S3 bucket containing raw data files
   PipelineBucket:
     Type: AWS::S3::Bucket
     Properties:
