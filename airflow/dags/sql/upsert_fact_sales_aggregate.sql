@@ -22,6 +22,6 @@ SELECT sales_key, date_key, quantity_sold, revenue
 FROM #final_fact_sales_aggregate
 
 -- cleanup
-DROP TABLE #final_fact_sales_aggregate
+DROP TABLE IF EXISTS #final_fact_sales_aggregate
 
 END TRANSACTION;
