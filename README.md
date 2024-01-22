@@ -7,21 +7,20 @@ Provide a brief introduction to the project, its purpose, and the problems it ai
 ## Architecture
 
 Include an image that visually represents the project's architecture. Briefly describe the high-level components and how they interact.
-![Architecture Diagram](link-to-image)
 
-Explain airflow pipeline
-![Airflow pipeline](link-to-image)
+<img src="images/architecture.png">
+
+
+
+### Data pipeline
+
+<img src="images/airflow_dag.png">
 
 
 ## Data Model
 
-draw.io
+<img src="images/data_model.png">
 
-dim_date(PK)
-dim_product(PK, NK, scd1, housekeeping)
-dim_customer(PK, NK, scd2, housekeeping)
-fact_sales (PK,FK, cust_key je late arriving dimension, housekeeping cols)
-log_data_quality
 
 
 ## Tech
