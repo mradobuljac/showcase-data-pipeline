@@ -9,14 +9,14 @@ import configparser
 
 
 @dag(
-    start_date=datetime(2024, 1, 10),
+    start_date=datetime(2024, 1, 15),
     schedule="@daily",  # at midnight
     default_args={
         "depends_on_past": True,
         "aws_conn_id": "aws_conn",
     },  # all tasks will have this option enabled
     max_active_runs=1,  # only one DAG run can be executing at any point in time
-    catchup=False,  # run all DAG runs from start_date till current data
+    catchup=True,  # run all DAG runs from start_date till current data
 )
 def showcase_data_pipeline():
     # {{ ds }} is a template for logical date. On runtime will be resolved into yyyy-mm-dd corresponding to each dagrun

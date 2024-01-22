@@ -57,6 +57,14 @@ transaction_code NVARCHAR(255)
 )
 ;
 
+CREATE TABLE IF NOT EXISTS showcase_data_pipeline.fact_sales_aggregate (
+sales_key INT IDENTITY(1, 1),
+date_key INT SORTKEY DISTKEY,
+quantity_sold INT,
+revenue REAL
+)
+;
+
 CREATE TABLE IF NOT EXISTS showcase_data_pipeline.dim_date (
     date_key INT DISTKEY SORTKEY,
     full_date DATE,
