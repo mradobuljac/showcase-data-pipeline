@@ -67,6 +67,16 @@ def showcase_data_pipeline():
         wait_for_completion=True,
     )
 
+    # data quality actions for product data
+    product_data_quality = RedshiftDataOperator(
+        task_id="product_data_quality",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
+        sql="./sql/product_data_quality.sql",
+        wait_for_completion=True,
+    )
+
     # COPY sales data from S3 bucket into Redshift staging table
     s3_to_redshift_stage_sales = RedshiftDataOperator(
         task_id="s3_to_redshift_stage_sales",
@@ -74,6 +84,16 @@ def showcase_data_pipeline():
         database=redshift_database,
         db_user=redshift_user,
         sql="./sql/s3_to_stage_sales.sql",
+        wait_for_completion=True,
+    )
+
+    # data quality actions for sales data
+    sales_data_quality = RedshiftDataOperator(
+        task_id="sales_data_quality",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
+        sql="./sql/sales_data_quality.sql",
         wait_for_completion=True,
     )
 
@@ -99,10 +119,10 @@ def showcase_data_pipeline():
 
     # dependencies setup
     redshift_ddl_setup >> [products_from_api_to_s3, sales_from_api_to_s3]
-    products_from_api_to_s3 >> s3_to_redshift_stage_products
-    sales_from_api_to_s3 >> s3_to_redshift_stage_sales
+    products_from_api_to_s3 >> s3_to_redshift_stage_products >> product_data_quality
+    sales_from_api_to_s3 >> s3_to_redshift_stage_sales >> sales_data_quality
     (
-        [s3_to_redshift_stage_products, s3_to_redshift_stage_sales]
+        [product_data_quality, sales_data_quality]
         >> upsert_dim_products
         >> upsert_fact_sales
     )
