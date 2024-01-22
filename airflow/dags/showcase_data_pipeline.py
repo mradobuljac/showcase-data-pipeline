@@ -22,7 +22,6 @@ def showcase_data_pipeline():
     # {{ ds }} is a template for logical date. On runtime will be resolved into yyyy-mm-dd corresponding to each dagrun
     # will be sent to lambda functions to orchestrate pipeline around "logical date" concept
     # as a side note, {{ ds }} is also used in .sql files to ensure only data for this DAG run is moved and transformed
-    payload = {"date": "{{ ds }}"}
 
     parser = configparser.ConfigParser()
     parser.read(
@@ -48,18 +47,34 @@ def showcase_data_pipeline():
         function_name="showcase_data_pipeline_sales_to_s3",
         invocation_type="RequestResponse",
         payload=json.dumps(
-            payload
+            {"date": "{{ ds }}"}
         ),  # extract only delta data for incremental load. Also necessary for S3 prefix
     )
 
     # get products data from API endpoint and upload to S3 bucket
     products_from_api_to_s3 = LambdaInvokeFunctionOperator(
         task_id="products_to_s3",
-        function_name="showcase_data_pipeline_products_to_s3",
+        function_name="showcase_data_pipeline_dims_to_s3",
         invocation_type="RequestResponse",
         payload=json.dumps(
-            payload
-        ),  # delta extract not needed for dims, but necessary for S3 prefix
+            {
+                "date": "{{ ds }}",
+                "dimension": "products",
+            }  # delta extract not needed for dims, but necessary for S3 prefix
+        ),
+    )
+
+    # get customers data from API endpoint and upload to S3 bucket
+    customers_from_api_to_s3 = LambdaInvokeFunctionOperator(
+        task_id="customers_to_s3",
+        function_name="showcase_data_pipeline_dims_to_s3",
+        invocation_type="RequestResponse",
+        payload=json.dumps(
+            {
+                "date": "{{ ds }}",
+                "dimension": "customers",
+            }  # delta extract not needed for dims, but necessary for S3 prefix
+        ),
     )
 
     # COPY products data from S3 bucket into Redshift staging table
@@ -79,6 +94,26 @@ def showcase_data_pipeline():
         database=redshift_database,
         db_user=redshift_user,
         sql="./sql/product_data_quality.sql",
+        wait_for_completion=True,
+    )
+
+    # COPY customers data from S3 bucket into Redshift staging table
+    s3_to_redshift_stage_customers = RedshiftDataOperator(
+        task_id="s3_to_redshift_stage_customers",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
+        sql="./sql/s3_to_stage_customers.sql",
+        wait_for_completion=True,
+    )
+
+    # data quality actions for customer data
+    customer_data_quality = RedshiftDataOperator(
+        task_id="customer_data_quality",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
+        sql="./sql/customer_data_quality.sql",
         wait_for_completion=True,
     )
 
@@ -103,12 +138,22 @@ def showcase_data_pipeline():
     )
 
     # upsert dim_products table with new data
-    upsert_dim_products = RedshiftDataOperator(
-        task_id="upsert_dim_products",
+    upsert_dim_products_scd1 = RedshiftDataOperator(
+        task_id="upsert_dim_products_scd1",
         cluster_identifier=redshift_cluster,
         database=redshift_database,
         db_user=redshift_user,
         sql="./sql/upsert_dim_products.sql",
+        wait_for_completion=True,
+    )
+
+    # upsert dim_customers table with new data
+    upsert_dim_customers_scd2 = RedshiftDataOperator(
+        task_id="upsert_dim_customers_scd2",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
+        sql="./sql/upsert_dim_customers.sql",
         wait_for_completion=True,
     )
 
@@ -123,12 +168,18 @@ def showcase_data_pipeline():
     )
 
     # dependencies setup
-    redshift_ddl_setup >> [products_from_api_to_s3, sales_from_api_to_s3]
+    redshift_ddl_setup >> [
+        products_from_api_to_s3,
+        sales_from_api_to_s3,
+        customers_from_api_to_s3,
+    ]
     products_from_api_to_s3 >> s3_to_redshift_stage_products >> product_data_quality
     sales_from_api_to_s3 >> s3_to_redshift_stage_sales >> sales_data_quality
+    customers_from_api_to_s3 >> s3_to_redshift_stage_customers >> customer_data_quality
     (
-        [product_data_quality, sales_data_quality]
-        >> upsert_dim_products
+        [product_data_quality, sales_data_quality, customer_data_quality]
+        >> upsert_dim_products_scd1
+        >> upsert_dim_customers_scd2
         >> upsert_fact_sales
     )
 

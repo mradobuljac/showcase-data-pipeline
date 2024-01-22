@@ -68,7 +68,7 @@ def lambda_handler(event: any, context: dict) -> dict:
     for _ in range(NUM_NEW_ROWS):
         d = {
             "CustomerId": randint(50, 100),
-            "CustomerName": f"{fake.company().title()}",
+            "CustomerName": f"{fake.company().replace(',', '').title()}",
             "Industry": random.choice(industry),
             "CustomerSatisfactionRating": randint(1, 100),
         }

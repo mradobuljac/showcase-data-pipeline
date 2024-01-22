@@ -64,11 +64,11 @@ log_data_quality
 |      |--requirements.txt                  # requirements file for this lambda function
 |   |--/get_generated_sales_data
 |      |--get_changed_product_data.py       # lambda function code
-|   |--/products_to_s3
-|      |--products_to_s3.py                 # lambda function code
+|   |--/dims_to_s3
+|      |--dims_to_s3.py                 # lambda function code
 |      |--requirements.py                   # requirements file for this lambda function
 |   |--/sales_to_s3
-|      |--products_to_s3.py                 # lambda function code
+|      |--dims_to_s3.py                 # lambda function code
 |      |--requirements.py                   # requirements file for this lambda function
 |--.gitignore
 |--.pre-commit-config.yaml                  # pre-commit hooks executing Black code formatter before each commit

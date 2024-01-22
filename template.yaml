@@ -42,23 +42,29 @@ Resources:
             Path: /products
             Method: get
 
-  # Lambda extracts product data from API and uploads to S3 bucket
-  ProductsToS3:
+  # API Endpoint serving customers data
+  GetChangedCustomersDataApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: MyGetGeneratedCustomersDataApi
+
+  # Backend Lambda code for customers API endpoint
+  GetChangedCustomersDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: showcase_data_pipeline_products_to_s3
-      CodeUri: src/products_to_s3/
-      Handler: products_to_s3.lambda_handler
+      CodeUri: src/get_changed_customer_data/
+      Handler: get_changed_customer_data.lambda_handler
       Runtime: python3.10
-      Policies: # this bucket policy is all that's necessary to allow lambda func to write to a bucket. Too easy!
-        - S3WritePolicy:
-            BucketName: !Ref PipelineBucket
       Architectures:
         - x86_64
-      Environment:
-        Variables:
-          ENDPOINT: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
-          BUCKET: !Ref PipelineBucket
+      Events:
+        GetChangedCustomersDataApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GetChangedCustomersDataApi
+            Path: /customers
+            Method: get
+
 
   # API Endpoint serving sales data
   GetGeneratedSalesDataApi:
@@ -101,28 +107,26 @@ Resources:
           ENDPOINT: !Sub "https://${GetGeneratedSalesDataApi}.execute-api.${AWS::Region}.amazonaws.com/sales"
           BUCKET: !Ref PipelineBucket
 
-  # API Endpoint serving customers data
-  GetChangedCustomersDataApi:
-    Type: AWS::Serverless::HttpApi
-    Properties:
-      Name: MyGetGeneratedCustomersDataApi
 
-  # Backend Lambda code for customers API endpoint
-  GetChangedCustomersDataFunction:
+  # Lambda extracts dimension data from API and uploads to S3 bucket
+  ProductsToS3:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/get_changed_customer_data/
-      Handler: get_changed_customer_data.lambda_handler
+      FunctionName: showcase_data_pipeline_dims_to_s3
+      CodeUri: src/dims_to_s3/
+      Handler: dims_to_s3.lambda_handler
       Runtime: python3.10
+      Policies: # this bucket policy is all that's necessary to allow lambda func to write to a bucket. Too easy!
+        - S3WritePolicy:
+            BucketName: !Ref PipelineBucket
       Architectures:
         - x86_64
-      Events:
-        GetChangedCustomersDataApi:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref GetChangedCustomersDataApi
-            Path: /customers
-            Method: get
+      Environment:
+        Variables:
+          PRODUCTS_ENDPOINT: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
+          CUSTOMERS_ENDPOINT: !Sub "https://${GetChangedCustomersDataApi}.execute-api.${AWS::Region}.amazonaws.com/customers"
+          BUCKET: !Ref PipelineBucket
+
 
 Outputs:
   GetChangedProductDataApi:

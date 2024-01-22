@@ -18,6 +18,24 @@ CREATE TABLE IF NOT EXISTS showcase_data_pipeline.dim_products (
     product_rating INT
 );
 
+CREATE TABLE IF NOT EXISTS showcase_data_pipeline.stage_customers (
+    customer_id INT NOT NULL DISTKEY SORTKEY,
+    customer_name VARCHAR(255),
+    customer_industry VARCHAR(50),
+    customer_satisfaction_rating INT
+)
+;
+
+CREATE TABLE IF NOT EXISTS showcase_data_pipeline.dim_customers (
+    customer_key INT IDENTITY(1,1) NOT NULL DISTKEY SORTKEY PRIMARY KEY,
+    customer_id INT NOT NULL,
+    customer_name VARCHAR(255),
+    customer_industry VARCHAR(50),
+    customer_satisfaction_rating INT,
+    row_effective_date date,
+    row_expired_date date,
+    is_current bool
+);
 
 CREATE TABLE IF NOT EXISTS showcase_data_pipeline.stage_sales (
 date_id DATE SORTKEY DISTKEY,
@@ -32,6 +50,7 @@ CREATE TABLE IF NOT EXISTS showcase_data_pipeline.fact_sales (
 sales_key INT IDENTITY(1, 1),
 date_key INT SORTKEY DISTKEY,
 product_key INT,
+customer_key INT,
 quantity_sold INT,
 revenue REAL,
 transaction_code NVARCHAR(255)
