@@ -101,11 +101,36 @@ Resources:
           ENDPOINT: !Sub "https://${GetGeneratedSalesDataApi}.execute-api.${AWS::Region}.amazonaws.com/sales"
           BUCKET: !Ref PipelineBucket
 
+  # API Endpoint serving customers data
+  GetChangedCustomersDataApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: MyGetGeneratedCustomersDataApi
+
+  # Backend Lambda code for customers API endpoint
+  GetChangedCustomersDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/get_changed_customer_data/
+      Handler: get_changed_customer_data.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetChangedCustomersDataApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GetChangedCustomersDataApi
+            Path: /customers
+            Method: get
 
 Outputs:
   GetChangedProductDataApi:
     Description: "API Gateway endpoint URL for Prod stage for GetChangedProductData function"
     Value: !Sub "https://${GetChangedProductDataApi}.execute-api.${AWS::Region}.amazonaws.com/products"
+  GetChangedCustomersDataApi:
+    Description: "API Gateway endpoint URL for Prod stage for GetChangedCustomersData function"
+    Value: !Sub "https://${GetChangedCustomersDataApi}.execute-api.${AWS::Region}.amazonaws.com/customers"
   GetGeneratedSalesDataApi:
     Description: "API Gateway endpoint URL for Prod stage for GetGeneratedSalesData function"
     Value: !Sub "https://${GetGeneratedSalesDataApi}.execute-api.${AWS::Region}.amazonaws.com/sales"
