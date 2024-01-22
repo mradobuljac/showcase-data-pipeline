@@ -13,6 +13,7 @@ LEFT JOIN showcase_data_pipeline.dim_date dt
     ON stg.date_id = dt.full_date
 LEFT JOIN showcase_data_pipeline.dim_products prod
     ON stg.product_id = prod.product_id
+WHERE stg.date_id = '{{ ds }}'  -- {{ ds }} is airflow template that resolves into yyyy-mm-dd of active data pipeline. Ensure only data from active DAG run data pipeline is moved and transformed!
 ;
 
 -- delete fact_sales rows that match with staging_sales

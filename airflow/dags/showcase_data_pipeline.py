@@ -21,6 +21,7 @@ import configparser
 def showcase_data_pipeline():
     # {{ ds }} is a template for logical date. On runtime will be resolved into yyyy-mm-dd corresponding to each dagrun
     # will be sent to lambda functions to orchestrate pipeline around "logical date" concept
+    # as a side note, {{ ds }} is also used in .sql files to ensure only data for this DAG run is moved and transformed
     payload = {"date": "{{ ds }}"}
 
     parser = configparser.ConfigParser()
@@ -41,20 +42,24 @@ def showcase_data_pipeline():
         wait_for_completion=True,
     )
 
-    # get products data from API endpoint and upload to S3 bucket
-    products_from_api_to_s3 = LambdaInvokeFunctionOperator(
-        task_id="products_to_s3",
-        function_name="showcase_data_pipeline_products_to_s3",
-        invocation_type="RequestResponse",
-        payload=json.dumps(payload),
-    )
-
     # get sales data from API endpoint and upload to S3 bucket
     sales_from_api_to_s3 = LambdaInvokeFunctionOperator(
         task_id="sales_to_s3",
         function_name="showcase_data_pipeline_sales_to_s3",
         invocation_type="RequestResponse",
-        payload=json.dumps(payload),
+        payload=json.dumps(
+            payload
+        ),  # extract only delta data for incremental load. Also necessary for S3 prefix
+    )
+
+    # get products data from API endpoint and upload to S3 bucket
+    products_from_api_to_s3 = LambdaInvokeFunctionOperator(
+        task_id="products_to_s3",
+        function_name="showcase_data_pipeline_products_to_s3",
+        invocation_type="RequestResponse",
+        payload=json.dumps(
+            payload
+        ),  # delta extract not needed for dims, but necessary for S3 prefix
     )
 
     # COPY products data from S3 bucket into Redshift staging table
