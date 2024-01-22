@@ -60,7 +60,7 @@ INNER JOIN showcase_data_pipeline.dim_customers tgt
 INNER JOIN #max_column max_col
     ON tgt.customer_id = max_col.customer_id
 WHERE
-    tgt.row_expired_date = max_col.max_expired_date AND tgt.row_effective_date = max_col.max_effective_date	-- get only latest version of the tgt row. That way way we won't compare changes between src and already expired rows
+    (tgt.row_expired_date = max_col.max_expired_date AND tgt.row_effective_date = max_col.max_effective_date)	-- get only latest version of the tgt row. That way way we won't compare changes between src and already expired rows
     AND (	-- identify changes
         NVL(src.customer_name, '') <> NVL(tgt.customer_name, '')
         OR NVL(src.customer_industry, '') <> NVL(tgt.customer_industry, '')
