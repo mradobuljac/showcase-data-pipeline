@@ -2,22 +2,24 @@
 
 ## Overview
 
-Provide a brief introduction to the project, its purpose, and the problems it aims to solve. Highlight key features and benefits for potential users or contributors.
+Project Overview 
 
 ## Architecture
 
-Include an image that visually represents the project's architecture. Briefly describe the high-level components and how they interact.
+Architecture Description...
 
 <img src="images/architecture.png">
 
 
-
 ### Data pipeline
+
+Data Pipeline Overview...
 
 <img src="images/airflow_dag.png">
 
-
 ## Data Model
+
+Data model is Kimball stype star schema
 
 <img src="images/data_model.png">
 
@@ -25,18 +27,29 @@ Include an image that visually represents the project's architecture. Briefly de
 
 ## Tech
 
-	Airflow             # Orchestrator for Lambda functions and Redshift code 
-	Docker              # Enables consistent and reproducible local Airflow deployment
-	GitHub Actions      # CI/CD service, automating building and deployment of data solution to AWS cloud
-	GitHub              # Version control
-	SQL                 # Data modeling and transformation logic within Redshift 
-	Python              # Backend language for HTTP APIs in AWS Lambda; also used for API data extraction logic and writing Airflow orchestration code
-	AWS SAM Framework   # SAM templates and SAM CLI for development, testing, and deployment of serverless apps, including Lambda functions and API Gateway endpoints
-	AWS SAM Template    # IaaC for the project, extends AWS CloudFormation
-	AWS Lambda          # Serverless backend service for APIs, and API data extraction logic
-	AWS S3              # Object storage and data lake 
-	AWS Redshift        # Cloud data warehouse 
-	AWS API Gateway     # Hosts API endpoints, acts as a data source
+Airflow: Orchestrator for Lambda functions and Redshift code 
+
+Docker: Enables consistent and reproducible local Airflow deployment
+
+GitHub Actions: CI/CD service, automating building and deployment of data solution to AWS cloud
+
+GitHub: Version control
+
+SQL: Data modeling and transformation logic within Redshift 
+
+Python: Backend language for HTTP APIs in AWS Lambda; also used for API data extraction logic and writing Airflow orchestration code
+
+AWS SAM Framework: SAM templates and SAM CLI for development, testing, and deployment of serverless apps, including Lambda functions, S3 bucket, and API Gateway endpoints
+
+AWS SAM Template: IaaC for the project, extends AWS CloudFormation
+
+AWS Lambda: Serverless backend service for APIs, and API data extraction logic
+
+AWS S3: Object storage and data lake 
+
+AWS Redshift: Cloud data warehouse 
+
+AWS API Gateway: Hosts API endpoints, acts as a data source
 
 ## Project Structure
 
