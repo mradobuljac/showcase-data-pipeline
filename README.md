@@ -105,8 +105,8 @@ AWS API Gateway: Hosts API endpoints, acts as a data source
 ### Redshift 
 - Provisioning Redshift from IaaC template is not in scope of this project. Please create your own cluster.
 - Please ensure that IAM role attached to your cluster can COPY from S3, and that Cluster can be accessed from local clients, including Airflow.
-- change airflow/dags/redshift_config.txt values to your cluster values.
-- change IAM Role in s3_to_stage_products.sql, s3_to_stage_sales.sql, and s3_to_stage_customers.sql to IAM role attached to your cluster.
+- Change airflow/dags/redshift_config.txt values to your cluster values.
+- Change IAM Role in s3_to_stage_products.sql, s3_to_stage_sales.sql, and s3_to_stage_customers.sql to IAM role attached to your cluster.
 
 ### Clone the repository
 ```bash
@@ -127,14 +127,14 @@ cd showcase-data-pipeline/airflow
 docker compose up airflow-init
 docker compose up
 ```
-- alternatively, follow official instructions https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
-- to enter web UI to manage and observe workflows, go to http://localhost:8080/home
+- Alternatively, follow official instructions https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
+- To enter web UI to manage and observe workflows, go to http://localhost:8080/home
   - username: airflow
   - password: airflow 
 - To connect Airflow with AWS, we need to create a connection. Make sure to name it **aws_conn**! Go to Admin -> Connections -> Add a new record: 
 
  <img src="images/airflow_aws_conn.png">
 
-- That's it! You can now open showcase_data_pipeline and run it!
+- That's it! You can now open showcase_data_pipeline DAG and run it!
 
 

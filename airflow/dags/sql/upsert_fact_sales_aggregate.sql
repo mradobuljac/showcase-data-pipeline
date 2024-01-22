@@ -9,6 +9,7 @@ INTO #final_fact_sales_aggregate
 FROM showcase_data_pipeline.fact_sales sls
 WHERE date_key = '{{ ds_nodash }}'
 GROUP BY date_key
+;
 
 -- delete existing fact_sales_aggregate data for logical date if exists
 DELETE FROM showcase_data_pipeline.fact_sales_aggregate
@@ -17,11 +18,12 @@ WHERE #final_fact_sales_aggregate.date_key = showcase_data_pipeline.fact_sales_a
 ;
 
 -- insert
-INSERT INTO fact_sales_aggregate (sales_key, date_key, quantity_sold, revenue)
-SELECT sales_key, date_key, quantity_sold, revenue
+INSERT INTO showcase_data_pipeline.fact_sales_aggregate (date_key, quantity_sold, revenue)
+SELECT date_key, quantity_sold, revenue
 FROM #final_fact_sales_aggregate
+;
 
 -- cleanup
-DROP TABLE IF EXISTS #final_fact_sales_aggregate
+DROP TABLE IF EXISTS #final_fact_sales_aggregate;
 
 END TRANSACTION;

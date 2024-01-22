@@ -14,8 +14,8 @@ LEFT JOIN showcase_data_pipeline.dim_date dt
 LEFT JOIN showcase_data_pipeline.dim_products prod  -- scd1 table
     ON stg.product_id = prod.product_id
 LEFT JOIN showcase_data_pipeline.dim_customers cust  -- scd2 table
-    ON stg.customer_id = prod.customer_id
-    AND stg.date_id BETWEEN prod.row_effective_date AND prod.row_expired_date   -- join to rows that were active during pipeline logical date
+    ON stg.customer_id = cust.customer_id
+    AND stg.date_id BETWEEN cust.row_effective_date AND cust.row_expired_date   -- join to rows that were active during pipeline logical date
 WHERE stg.date_id = '{{ ds }}'  -- {{ ds }} is airflow template that resolves into yyyy-mm-dd of active data pipeline. Ensure only data from active DAG run data pipeline is moved and transformed!
 ;
 
