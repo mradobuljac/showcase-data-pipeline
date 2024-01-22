@@ -167,6 +167,16 @@ def showcase_data_pipeline():
         wait_for_completion=True,
     )
 
+    # upsert fact_sales_aggregate table with new data
+    upsert_fact_sales_aggregate = RedshiftDataOperator(
+        task_id="upsert_fact_sales_aggregate",
+        cluster_identifier=redshift_cluster,
+        database=redshift_database,
+        db_user=redshift_user,
+        sql="./sql/upsert_fact_sales_aggregate.sql",
+        wait_for_completion=True,
+    )
+
     # dependencies setup
     redshift_ddl_setup >> [
         products_from_api_to_s3,
@@ -181,6 +191,7 @@ def showcase_data_pipeline():
         >> upsert_dim_products_scd1
         >> upsert_dim_customers_scd2
         >> upsert_fact_sales
+        >> upsert_fact_sales_aggregate
     )
 
 
