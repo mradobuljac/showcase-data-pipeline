@@ -1,0 +1,31 @@
+"CustomerId","CompanyName","Industry","CustomerSatisfactionRating"
+1,"Tech Innovators Inc.","Technology",87
+2,"Global Solutions Co.","Consulting",42
+3,"AeroTech Systems","Aerospace",95
+4,"EuroTech Solutions","Technology",78
+5,"Japan Electronics Ltd.","Electronics",89
+6,"Latin American Robotics","Robotics",36
+7,"ParisTech Consultants","Consulting",92
+8,"South American Motors","Automotive",45
+9,"Indian IT Services","Technology",88
+10,"Korean Electronics Corp.","Electronics",93
+11,"Brazilian Manufacturing","Manufacturing",40
+12,"Italian Fashion Group","Fashion",84
+13,"Nile Valley Technologies","Technology",33
+14,"Delhi Software Solutions","Software",79
+15,"Mexican Sustainable Solutions","Sustainability",81
+16,"Osaka Robotics Co.","Robotics",38
+17,"French Design Studios","Design",90
+18,"Bangalore IT Innovations","Technology",94
+19,"New York Finance Corp.","Finance",47
+20,"Tokyo Robotics & AI","Robotics",86
+21,"Barcelona Sustainable Energy","Energy",88
+22,"Madrid Motors","Automotive",41
+23,"Beijing Tech Hub","Technology",97
+24,"Tokyo Fashion Trends","Fashion",44
+25,"Buenos Aires Motors","Automotive",89
+26,"Berlin Engineering Solutions","Engineering",96
+27,"Mumbai IT Services","Technology",48
+28,"Cairo IT Solutions","Technology",87
+29,"Sao Paulo Manufacturing","Manufacturing",91
+30,"LA Tech Ventures","Technology",50

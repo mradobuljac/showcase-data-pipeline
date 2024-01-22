@@ -20,6 +20,7 @@ else:
 NUM_CHANGES = 3  # number of updates to source data file
 NUM_NEW_ROWS = 3  # number of newly generated product rows
 SOURCE_DATA_FILE = r"product_data.txt"
+SOURCE_FILE_NUM_PRODUCTS = 30
 
 
 def lambda_handler(event: any, context: dict) -> dict:
@@ -45,7 +46,7 @@ def lambda_handler(event: any, context: dict) -> dict:
             products.append(d)
 
     # change ProductRating value of randomly selected products
-    rands = [randint(1, 30) for _ in range(NUM_CHANGES)]
+    rands = [randint(1, SOURCE_FILE_NUM_PRODUCTS - 1) for _ in range(NUM_CHANGES)]
     for rand in rands:
         products[rand]["ProductRating"] = randint(1, 100)
         logging.info(f"Changed existing product to: {products[rand]}")
