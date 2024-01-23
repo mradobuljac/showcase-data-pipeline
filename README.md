@@ -26,13 +26,17 @@ DataOps is implemented by git, GitHub Actions (CICD pipeline), and AWS SAM templ
 
 ### Data Pipeline
 
-Pipeline orchestrates lambda functions and redshift code. Lambdas are used for data extraction from API endpoints, light data transformation, and upload to S3 bucket. Redshift code hosts upserts and data quality code.
+Pipeline orchestrates lambda functions and redshift code. 
+
+Whole pipeline and all tasks are idempotent. Idempotency for data in stage_* tables is ensured via truncate-load pattern, for dim_* and fact_* tables via upsert pattern, and for raw data in S3 bucket via partitioning and overwrite pattern.
+
+Lambdas are used for data extraction from API endpoints, light data transformation, and upload to S3 bucket. Redshift code hosts upserts and data quality code.
 
 Pipeline uses {{ ds }} Airflow template that gets resolved into yyyy-mm-dd to sync data extraction and transformation for all components. 
-For example, URL for sales data extraction is /sales?date=yyyy-mm-dd.
+For example, endpoint for daily sales data extraction is /sales?date=yyyy-mm-dd.
 Lambdas also get {{ ds }} value from Airflow, so they can properly partition S3 bucket and upload daily data. Partitioning scheme is S3://showcase-data-pipeline/yyyy-mm-dd/data_files.*
 
-For dim tables, full table extract is implemented.
+For dim tables, full source data extract is implemented. 
 
 For fact_sales, delta extraction and incremental load are implemented. Every day, only data for that day ({{ ds }} -> Airflow logical date) is extracted from /sales endpoint and sent for further processing downstream.
 
@@ -44,6 +48,8 @@ For fact_sales, delta extraction and incremental load are implemented. Every day
 
 Data model is Kimball stype star schema. 
 Data model follows bronze-silver-gold structure. S3 bucket holds bronze data, partitioned and growing with every data load. Fact_sales within dimensional model shown here holds de-duped and enriched silver data. Fact_sales_aggregate holds gold aggregated sales data ready for analytics. 
+dim_products is scd1 and late arriving, dim_customers is scd2.
+
 
 <img src="images/data_model.png">
 
