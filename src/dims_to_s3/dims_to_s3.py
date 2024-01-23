@@ -20,7 +20,8 @@ BUCKET_NAME = os.environ["BUCKET"]
 def lambda_handler(event: dict, context: dict) -> str:
     """Reads products data from API Gateway endpoint and uploads to S3 bucket
 
-    :param event: Payload sent by Airflow in form of {"date": "{{ ds }}", "dimension": "products/customers"}. Governs whether this function returns products or customers data
+    :param event: Payload sent by Airflow in form of {"date": "{{ ds }}", "dimension": "products/customers"}.
+        Governs whether this function returns products or customers data
     :param context: Managed by AWS. Contains info about function execution and environment
     :return: execution status result
     """
@@ -33,8 +34,8 @@ def lambda_handler(event: dict, context: dict) -> str:
         endpoint = os.environ["CUSTOMERS_ENDPOINT"]
         file_name = "customers.csv"
     else:
-        logging.info(f"payload format wrong")
-        logging.info(f"{event}")
+        logging.info("payload format wrong")
+        logging.info(event)
         return "Failure"
 
     try:

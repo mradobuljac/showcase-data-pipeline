@@ -1,7 +1,7 @@
-requests
-black
-pytest
 pre-commit
+flake8
+black
+requests
 boto3
 awswrangler
 pandas
