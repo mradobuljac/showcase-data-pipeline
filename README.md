@@ -2,7 +2,7 @@
 
 ## Overview
 
-Projects showcases modern data solution built using contemporary tools, processes, and best practices.
+Projects showcases full stack modern data solution built using contemporary tools, processes, and best practices.
 
 ## Architecture
 
@@ -10,13 +10,13 @@ To simulate data sources, I've built my own API endpoints that serve data for th
 
 Lambda functions are also used to extract data from API Endpoints, transform it, and upload to S3.
 
-S3 bucket acts as a data lake for extracted data. Bucket is partitioned by date value provided by Airflow.
+S3 bucket acts as a data lake for extracted data. Bucket is partitioned by Logical date value ({{ ds }}) provided by Airflow.
 
-Orchestration is implemented by Airflow. More detailed info can be found in Data Pipeline section.
+Orchestration is implemented by Airflow. More details can be found in Data Pipeline section.
 
 Airflow is run locally on Docker containers.
 
-Redshift hosts tables and major data transformation logic, such as data quality scripts, scd1 and scd2 dimension table upserts, and fact table upserts.
+Redshift hosts data model tables and major data transformation logic, such as data quality scripts, scd1 and scd2 dimension table upserts, late arriving dimensions handling, and fact table upserts.
 
 DataOps is implemented by git, GitHub Actions (CICD pipeline), and AWS SAM template (IaaC).
 
@@ -28,7 +28,7 @@ DataOps is implemented by git, GitHub Actions (CICD pipeline), and AWS SAM templ
 
 Pipeline orchestrates lambda functions and redshift code. 
 
-Whole pipeline and all tasks are idempotent. Idempotency for data in stage_* tables is ensured via truncate-load pattern, for dim_* and fact_* tables via upsert pattern, and for raw data in S3 bucket via partitioning and overwrite pattern.
+Whole pipeline and all individual tasks are idempotent. Idempotency for data in stage_* tables is ensured via truncate-load pattern, for dim_* and fact_* tables via upsert pattern, and for raw data in S3 bucket via partitioning and overwrite pattern.
 
 Lambdas are used for data extraction from API endpoints, light data transformation, and upload to S3 bucket. Redshift code hosts upserts and data quality code.
 
@@ -38,7 +38,7 @@ Lambdas also get {{ ds }} value from Airflow, so they can properly partition S3 
 
 For dim tables, full source data extract is implemented. 
 
-For fact_sales, delta extraction and incremental load are implemented. Every day, only data for that day ({{ ds }} -> Airflow logical date) is extracted from /sales endpoint and sent for further processing downstream.
+For fact_sales, delta extraction and incremental load are implemented. Every day, only data for that day ({{ ds }}) is extracted from /sales endpoint and sent for further processing downstream.
 
 
 
@@ -46,8 +46,10 @@ For fact_sales, delta extraction and incremental load are implemented. Every day
 
 ## Data Model
 
-Data model is Kimball stype star schema. 
-Data model follows bronze-silver-gold structure. S3 bucket holds bronze data, partitioned and growing with every data load. Fact_sales within dimensional model shown here holds de-duped and enriched silver data. Fact_sales_aggregate holds gold aggregated sales data ready for analytics. 
+Data model is Kimball style star schema. 
+
+Data model follows bronze-silver-gold structure. S3 bucket holds raw bronze data, partitioned and growing with every data load. Fact_sales and dimension tables hold de-duped silver data. Fact_sales_aggregate holds gold aggregated sales data ready for performant analytics.
+
 dim_products is scd1 and late arriving, dim_customers is scd2.
 
 
@@ -69,7 +71,7 @@ SQL: Data modeling and transformation logic within Redshift
 
 Python: Backend language for HTTP APIs in AWS Lambda; also used for API data extraction logic and writing Airflow orchestration code
 
-AWS SAM Framework: SAM templates and SAM CLI for development, testing, and deployment of serverless apps, including Lambda functions, S3 bucket, and API Gateway endpoints
+AWS SAM Framework: SAM templates and SAM CLI for development, testing, and deployment of serverless apps, in this case Lambda functions, S3 bucket, and API Gateway endpoints
 
 AWS SAM Template: IaaC for the project, extends AWS CloudFormation
 
