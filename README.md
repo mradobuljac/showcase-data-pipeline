@@ -6,7 +6,7 @@ Projects showcases modern data solution built using contemporary tools, processe
 
 ## Architecture
 
-Instead of relying on outside data sources, I've decided to simulate them by building my own API endpoints that serves data for the project. Endpoints are built using API Gateway and Lambda functions (python runtime) as backend.
+To simulate data sources, I've built my own API endpoints that serve data for the project. Endpoints are built using API Gateway and Lambda functions (python runtime) as backend.
 
 Lambda functions are also used to extract data from API Endpoints, transform it, and upload to S3.
 
